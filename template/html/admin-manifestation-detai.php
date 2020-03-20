@@ -1,7 +1,6 @@
 <?php 
 $args = array(
     'post_type'              => array( 'wp_manifestation' ),
-    'author'                 => get_current_user_id(),
     'nopaging'               => true,
     'order'                  => 'ASC',
     'orderby'                => 'modified',
@@ -60,12 +59,6 @@ $query = new WP_Query( $args );
 
 
 <div action="" id="manif-details" >
- 
- 
-    <?php if ( $postTitleError != '' ) { ?>
-        <span class="error"><?php echo $postTitleError; ?></span>
-        <div class="clearfix"></div>
-    <?php } ?>
  
 
     

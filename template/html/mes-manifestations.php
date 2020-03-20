@@ -8,7 +8,16 @@ $args = array(
 	'order'                  => 'ASC',
 	'orderby'                => 'modified',
 );
+/* localhost */
 $id_edit_page = 249;
+$list_page = 242;
+$id_created_page = 249;
+
+/* online */
+// $id_edit_page = 6812;
+// $list_page = 6806;
+// $id_created_page = 6810;
+
 function get_excerpt( $count, $id ) {
 	$permalink = get_permalink($id);
 	$excerpt = get_the_content();
@@ -25,6 +34,7 @@ $query_manifestations = new WP_Query( $args );
 // The Loop
 if ( $query_manifestations->have_posts() ) {
 	?>
+    <a class="btn primary" href="<?php echo esc_url( get_page_link( $id_created_page ) ); ?>">Ajouter une nouvelle Manifestation</a>
 	<div>
 	<?php
 	while ( $query_manifestations->have_posts() ) {
@@ -43,11 +53,11 @@ if ( $query_manifestations->have_posts() ) {
 			  </div>
 
 			  <!-- Button -->
-              <a href="<?php echo  esc_url(get_post_permalink())?>" class="btn-floating btn-action ml-auto mr-4 mdb-color lighten-3"><i
-                  class="fa fa-chevron-right pl-1"></i></a>
+              <!-- <a href="<?php echo  esc_url(get_post_permalink())?>" class="btn-floating btn-action ml-auto mr-4 mdb-color lighten-3"><i
+                  class="fa fa-chevron-right pl-1"></i></a> -->
 
               <a href="<?php echo esc_url( get_page_link( $id_edit_page ) ); ?>?post=<?php echo get_the_ID(); ?>" class="btn-floating btn-action ml-auto mr-4 mdb-color lighten-3"><i
-                  class="fa fa-edit pl-1"></i></a>
+                  class="fa fa-edit" style="margin: 3px;"></i></a>
 
 			  <!-- Card content -->
 			  <div class="card-body">
@@ -57,7 +67,7 @@ if ( $query_manifestations->have_posts() ) {
 			    <hr>
 			    <!-- Text -->
 			    <div class="card-text">
-			    	<?php echo get_excerpt( 200, get_the_ID() ); ?>
+			    	<?php echo get_excerpt( 100, get_the_ID() ); ?>
 			    </div>
 
 			  </div>
@@ -66,11 +76,11 @@ if ( $query_manifestations->have_posts() ) {
 			  <div class="rounded-bottom mdb-color lighten-3 text-center pt-3">
 			    <ul class="list-unstyled list-inline font-small">
 			      <li class="list-inline-item pr-2 white-text"><i class="fa fa-clock pr-1"></i><?php echo get_the_date(); ?></li>
-			      <li class="list-inline-item pr-2"><a href="#" class="white-text"><i
-			            class="fa fa-comments pr-1"></i>12</a></li>
-			      <li class="list-inline-item pr-2"><a href="#" class="white-text"><i class="fa fa-facebook-f pr-1">
-			          </i>21</a></li>
-			      <li class="list-inline-item"><a href="#" class="white-text"><i class="fa fa-twitter pr-1"> </i>5</a></li>
+			      <!-- <li class="list-inline-item pr-2"><a href="#" class="white-text"><i
+			            class="fa fa-comments pr-1"></i>12</a></li> -->
+			      <li class="list-inline-item pr-2"><a href="#" class="white-text"><i class="fa fa-facebook pr-1">
+			          </i><?php echo get_post_meta(get_the_ID(), 'postHour', true) ?></a></li>
+			      <!-- <li class="list-inline-item"><a href="#" class="white-text"><i class="fa fa-twitter pr-1"> </i>5</a></li> -->
 			    </ul>
 			  </div>
 
@@ -100,7 +110,7 @@ wp_reset_postdata();
 
 <style type="text/css">
 	.mdb-color.lighten-3 {
-	    background-color: #929fba !important;
+	    background-color: #333333 !important;
 	}
 	.mdb-color {
 	    background-color: #45526e !important;
@@ -133,7 +143,9 @@ wp_reset_postdata();
 	    background-clip: border-box;
 	    border: 1px solid rgba(0,0,0,0.125);
 	    border-radius: .25rem;
-	        max-width: 360px;
+	    max-width: 360px;
+        height: max-content;
+        max-height: max-content;
 	}
 	.view img, .view video {
 	    position: relative;
@@ -159,6 +171,7 @@ wp_reset_postdata();
 	    position: relative;
 	    overflow: hidden;
 	    cursor: default;
+        min-height: 200px;
 	}
 	a:not([href]):not([tabindex]), a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
 	    color: inherit;
@@ -168,9 +181,11 @@ wp_reset_postdata();
 	.card .btn-action {
 	    margin-top: -1.44rem;
 	    margin-bottom: -1.44rem;
+        padding: 13px;
+        color: white;
 	}
 	.mdb-color.lighten-3 {
-	    background-color: #929fba !important;
+	    background-color: #333333 !important;
 	}
 	a.waves-effect, a.waves-light {
 	    display: inline-block;

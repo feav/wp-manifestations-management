@@ -27,13 +27,22 @@
 			add_action( 'init', array($this,'register_post_types'), 0 );
 			add_shortcode( 'wpm-mes-manifs', array($this,'mes_manifestations') );
 			add_shortcode( 'wpm-ajout-manif', array($this,'ajout_manifestations') );
+			add_shortcode( 'wpm-toutes-manif', array($this,'toutes_manifestations') );
+
 			add_action('add_meta_boxes', array($this,'wporg_add_custom_box'));
 			add_action('save_post', array($this,'wporg_save_postdata'));
 			add_action('manage_'.$this->post_type.'_posts_custom_column', array(&$this, 'custom_manifestation_columns'), 15, 3);
 			add_filter('manage_'.$this->post_type.'_posts_columns', array(&$this, 'manifestation_columns'), 15, 1);
+			//add_filter( 'cron_schedules', array(&$this,'add_cron_interval') );
 	    }  
 
-
+		function add_cron_interval( $schedules ) {
+			 $schedules['daily'] = array(
+			 'interval' => 86400,	
+			 'display' => esc_html__( 'Every Days' ),
+			 );
+			return $schedules;
+		 }
 	    function manifestation_columns($defaults ){
 
 				$defaults['manifestation_visible'] = esc_html__('Etat', 'wp_manifestation_manage');
@@ -43,9 +52,11 @@
 	    function custom_manifestation_columns($column_name, $postid){
 			if ( $column_name == 'manifestation_visible' ) {
 			 	$name = get_post_meta($postid,  'postVisibility',  false )[0];
-				if($name){
+				if($name ==1){
 					echo "<span style='background: #63f597;color: white;padding: 6px;'>Deja Approuvee</span>";
-				}else{
+				}else if($name == -1){
+					echo "<span style='background: #f56363;color: white;padding: 6px;'> Masque par l'utilisateur</span>";
+				}	else {
 
 					echo "<span style='background: #f56363;color: white;padding: 6px;'> En Attente d'Approbation</span>";
 				}		
@@ -173,7 +184,7 @@
 				'label'                 => __( 'Manifestation', 'wp_manifestation_manage' ),
 				'description'           => __( 'Les differentes manifestations', 'wp_manifestation_manage' ),
 				'labels'                => $labels,
-				'supports'              => array( 'title', 'editor', 'thumbnail' ),
+				'supports'              => array( 'title', 'editor', 'thumbnail','excerpt' ),
 				'taxonomies'            => array( 'category', 'post_tag' ),
 				'hierarchical'          => false,
 				'public'                => true,
@@ -201,6 +212,10 @@
 
 	    function ajout_manifestations() {
 			include(WPMM_DIR.'template/html/ajouter-manifestation.php');
+		}
+
+	    function toutes_manifestations() {
+			include(WPMM_DIR.'template/html/toutes-manifestations.php');
 		}
 	}
 
