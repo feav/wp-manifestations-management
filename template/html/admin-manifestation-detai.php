@@ -20,7 +20,9 @@ $query = new WP_Query( $args );
     $heure = '';
     $date = '';
 
-
+for ($i=0; $i < 20; $i++) { 
+    $list_image[]=0; 
+}
  ?>
  
 <?php if ( $query->have_posts() ) : while ( $query->have_posts() ) : $query->the_post(); ?>
@@ -67,19 +69,31 @@ $query = new WP_Query( $args );
             <fieldset>
                  <label for="postVisibility">Autoriser la manifestation [Derniere Modification <i><?php echo the_modified_date()?> </i>]:</label>
                 <select name="postVisibility" id="postVisibility">
-                    <option value="0" <?php if(!$visible)echo 'selected="selected"';?>>
+                    <option value="0" <?php if($visible==0)echo 'selected="selected"';?>>
                         Cacher la Manifestation sur le Site
                     </option>
-                    <option value="1" <?php if($visible)echo 'selected="selected"';?>>
+                    <option value="1" <?php if($visible==1)echo 'selected="selected"';?>>
                         Afficher la Manifestation sur le Site
+                    </option>
+                    <option value="-1" <?php if($visible==-1)echo 'selected="selected"';?>>
+                        Le moderateur a desactive l affichage
                     </option>
                 </select>
             </fieldset>
             <fieldset  >
                 <label for="postThematique"><?php _e( 'Thematique :', 'wp_manifestation_manage' ); ?></label>
              
-                <input name="postThematique" type="text" id="postThematique" value="<?php echo $thematique; ?>" />
-            </fieldset>
+                <?php $themes = explode(',', "Rassemblement,Salon – Exposition,Raid – Rallye – Circuit – Courses,Ventes aux enchères,Bourses – Ventes,Divers");?>
+                    <select name="postThematique" <?php echo $dissabled ?> id="postThematique" value="<?php echo $thematique; ?>">
+                                <?php foreach ($themes as $key => $value) {
+                                     $selected='';
+                                    if($value === $thematique)
+                                        $selected = "selected='selected'";
+                                    echo "<option value='".$value."' ".$selected .">".$value."</option>";
+                                }
+                                ?>
+                    </select>
+                            </fieldset>
             <div class="double">
                 <div style="width: 49%">
                              
@@ -126,6 +140,29 @@ $query = new WP_Query( $args );
         </div>
     </div>
 
+    <div class="double-many">
+        <?php  
+
+        $list_image = array();
+            for ($i=0; $i < 20; $i++) { 
+                $list_image[]= get_post_meta($post_id, '_thumbnail_rapport_id_'.$i, true); 
+                // var_dump(get_post_meta($post_id, '_thumbnail_rapport_id_'.$i, true));
+            }
+        foreach ($list_image as $key => $value) { ?>
+                <?php
+                $c = wp_get_attachment_image_src( $value,'medium' )[0];
+
+                ?>
+            <div style="margin: 5px;" <?php if(!$c)echo 'class=" hide-label"'?>>
+                <!-- <label for="postTitle"><?php _e( "Images ".(1+$key), 'wp_manifestation_manage' ); ?></label> -->
+                <?php if ($c) {  ?>
+                    <label class="img" for="postThumbnail<?php echo $key; ?>">         
+                        <img src="<?php echo wp_get_attachment_image_src( $value,'medium' )[0];?>" style="width: 500px;" id="avatar-postThumbnail<?php echo $key; ?>">
+                    </label>
+                <?php  } ?>
+            </div>
+        <?php } ?>
+    </div>
 </div>
 <style type="text/css">
     #manif-details div.double {
@@ -146,6 +183,20 @@ $query = new WP_Query( $args );
         height: 40px !important;
     }
 
+    .double-many > div.hide-label{
+            display: none;
+    }
+    .double-many > div img {
+        width: 100% !important;
+    }
+
+    .double-many > div {
+        width: 30% !important;
+        display: inline-block;
+    }
+    .double-many {
+        display: block;
+    }
 </style>
 <?php
 

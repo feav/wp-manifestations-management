@@ -4,6 +4,7 @@
 $args = array(
 	'post_type'              => array( 'wp_manifestation' ),
 	'author'                 => get_current_user_id(),
+    'post_status'            => array( 'publish','future'),    
 	'nopaging'               => true,
 	'order'                  => 'ASC',
 	'orderby'                => 'modified',
@@ -14,9 +15,10 @@ $list_page = 242;
 $id_created_page = 249;
 
 /* online */
-// $id_edit_page = 6812;
-// $list_page = 6806;
-// $id_created_page = 6810;
+$id_edit_page = 3312;
+$list_page = 3307;
+$id_created_page = 3310;
+$list_all = 3303;
 
 function get_excerpt( $count, $id ) {
 	$permalink = get_permalink($id);
@@ -34,7 +36,6 @@ $query_manifestations = new WP_Query( $args );
 // The Loop
 if ( $query_manifestations->have_posts() ) {
 	?>
-    <a class="btn primary" href="<?php echo esc_url( get_page_link( $id_created_page ) ); ?>">Ajouter une nouvelle Manifestation</a>
 	<div>
 	<?php
 	while ( $query_manifestations->have_posts() ) {
@@ -78,7 +79,7 @@ if ( $query_manifestations->have_posts() ) {
 			      <li class="list-inline-item pr-2 white-text"><i class="fa fa-clock pr-1"></i><?php echo get_the_date(); ?></li>
 			      <!-- <li class="list-inline-item pr-2"><a href="#" class="white-text"><i
 			            class="fa fa-comments pr-1"></i>12</a></li> -->
-			      <li class="list-inline-item pr-2"><a href="#" class="white-text"><i class="fa fa-facebook pr-1">
+			      <li class="list-inline-item pr-2"><a href="#" class="white-text"><i class="fa fa-clock-o pr-1">
 			          </i><?php echo get_post_meta(get_the_ID(), 'postHour', true) ?></a></li>
 			      <!-- <li class="list-inline-item"><a href="#" class="white-text"><i class="fa fa-twitter pr-1"> </i>5</a></li> -->
 			    </ul>
@@ -143,7 +144,8 @@ wp_reset_postdata();
 	    background-clip: border-box;
 	    border: 1px solid rgba(0,0,0,0.125);
 	    border-radius: .25rem;
-	    max-width: 360px;
+	    max-width: 284px;
+        
         height: max-content;
         max-height: max-content;
 	}
@@ -240,6 +242,12 @@ wp_reset_postdata();
 	    font-size: 1.25rem;
 	    line-height: 47px;
 	}
+     .btn-floating i {
+        font-size: 1.25rem;
+        line-height: 0;
+        text-align: center;
+        width: max-content;
+    }
 	.fa, .fas {
 	    font-weight: 900;
 	}
@@ -334,5 +342,22 @@ wp_reset_postdata();
 	    display: inline-block;
 	    margin: 10px;
 	}
-
+    .view img, .view video {
+    position: relative;
+    display: block;
+    max-height: 200px;
+}
+#content .row.row-main {
+    padding: 0;
+    margin: 0 !important;
+}
+#content .row.row-main ,.container-width, .full-width .ubermenu-nav, .container, .row {
+    padding: 0;
+    margin: 0 !important;
+    max-width: max-content;
+}
+ #content .row.row-main > div {
+    width: 100%;
+    margin: 0;
+}
 </style>
